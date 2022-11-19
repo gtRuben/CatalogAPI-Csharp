@@ -24,7 +24,7 @@ namespace CatalogAPI.Controllers
             return (products == null) ? NotFound() : Ok(products);
         }
 
-        [HttpGet("{id:int}",Name ="GetProduct")]
+        [HttpGet("{id:int}", Name ="GetProduct")]
         public ActionResult Get(int id)
         {
             var product = _context.Products.FirstOrDefault(p => p.Id == id);
@@ -35,6 +35,8 @@ namespace CatalogAPI.Controllers
         [HttpPost]
         public ActionResult Post(Product product)
         {
+            if (product == null) return BadRequest();
+
             _context.Products.Add(product);
             _context.SaveChanges();
             
