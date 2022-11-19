@@ -27,9 +27,9 @@ namespace CatalogAPI.Controllers
         [HttpGet("{id:int}",Name ="GetProduct")]
         public ActionResult Get(int id)
         {
-            var products = _context.Products.FirstOrDefault(p => p.Id == id);
+            var product = _context.Products.FirstOrDefault(p => p.Id == id);
             
-            return (products == null) ? NotFound() : Ok(products);
+            return (product == null) ? NotFound() : Ok(product);
         }
 
         [HttpPost]
@@ -50,6 +50,19 @@ namespace CatalogAPI.Controllers
             _context.SaveChanges();
             
             return Ok(product);
+        }
+
+        [HttpDelete("{id:int}")]
+        public ActionResult Delete(int id)
+        {
+            var product = _context.Products.Find(id);
+
+            if (product == null) return NotFound();
+
+            _context.Products.Remove(product);
+            _context.SaveChanges();
+
+            return Ok();
         }
     }
 }
