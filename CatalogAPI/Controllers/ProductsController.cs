@@ -1,7 +1,7 @@
 ﻿using CatalogAPI.Context;
 using CatalogAPI.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CatalogAPI.Controllers
 {
@@ -20,6 +20,7 @@ namespace CatalogAPI.Controllers
         public ActionResult Get()
         {
             var products = _context.Products.ToList();
+            
             return (products == null) ? NotFound() : Ok(products);
         }
 
@@ -27,6 +28,7 @@ namespace CatalogAPI.Controllers
         public ActionResult Get(int id)
         {
             var products = _context.Products.FirstOrDefault(p => p.Id == id);
+            
             return (products == null) ? NotFound() : Ok(products);
         }
 
@@ -35,7 +37,19 @@ namespace CatalogAPI.Controllers
         {
             _context.Products.Add(product);
             _context.SaveChanges();
+            
             return new CreatedAtRouteResult("GetProduct", new { id = product.Id }, product);
+        }
+
+        [HttpPut("{id:int}")]
+        public ActionResult Put(int id, Product product)
+        {
+            if (product.Id != id) return BadRequest();
+
+            _context.Entry(product).State = EntityState.Modified;
+            _context.SaveChanges();
+            
+            return Ok(product);
         }
     }
 }
