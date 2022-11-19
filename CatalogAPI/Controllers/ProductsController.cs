@@ -19,7 +19,7 @@ namespace CatalogAPI.Controllers
         [HttpGet]
         public ActionResult Get()
         {
-            var products = _context.Products.ToList();
+            var products = _context.Products.AsNoTracking().ToList();
             
             return (products == null) ? NotFound() : Ok(products);
         }

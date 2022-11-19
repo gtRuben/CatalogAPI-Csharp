@@ -19,7 +19,7 @@ namespace CatalogAPI.Controllers
         [HttpGet]
         public ActionResult Get()
         {
-            var categories = _context.Categories.ToList();
+            var categories = _context.Categories.AsNoTracking().ToList();
 
             return (categories == null) ? NotFound() : Ok(categories);
         }
@@ -35,7 +35,7 @@ namespace CatalogAPI.Controllers
         [HttpGet("products")]
         public ActionResult GetCategoriesWithProducts()
         {
-            return Ok(_context.Categories.Include(p => p.Products).ToList());
+            return Ok(_context.Categories.Include(p => p.Products).AsNoTracking().ToList());
         }
 
         [HttpPost]
