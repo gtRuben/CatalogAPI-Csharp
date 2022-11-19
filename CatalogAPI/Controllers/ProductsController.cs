@@ -1,5 +1,4 @@
 ﻿using CatalogAPI.Context;
-using CatalogAPI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,9 +16,16 @@ namespace CatalogAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Product>> Get()
+        public ActionResult Get()
         {
             var products = _context.Products.ToList();
+            return (products == null) ? NotFound() : Ok(products);
+        }
+
+        [HttpGet("{id:int}")]
+        public ActionResult Get(int id)
+        {
+            var products = _context.Products.FirstOrDefault(p => p.Id == id);
             return (products == null) ? NotFound() : Ok(products);
         }
     }
